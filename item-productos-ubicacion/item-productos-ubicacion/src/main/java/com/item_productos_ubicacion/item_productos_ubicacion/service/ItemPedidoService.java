@@ -29,7 +29,18 @@ public class ItemPedidoService {
         ItemPedidoDTO dto = new ItemPedidoDTO();
         dto.setId(itemPedido.getId());
         dto.setCantidad(itemPedido.getCantidad());
-        dto.setPedido_id(itemPedido.getPedido_id());
+        try {
+            Integer pedidoDetectado = webClientBuilder.build()
+            .get()
+            .uri("  ")
+            .retrieve()
+            .bodyToMono(Integer.class)
+            .block();
+        dto.setPedido_id(pedidoDetectado);
+        } catch (Exception e) {
+            dto.setPedido_id("No existe");
+        }
+        return dto;
 
         if (itemPedido.getProducto() != null) {
             dto.setProducto(productoService.convertirDto(itemPedido.getProducto()));
