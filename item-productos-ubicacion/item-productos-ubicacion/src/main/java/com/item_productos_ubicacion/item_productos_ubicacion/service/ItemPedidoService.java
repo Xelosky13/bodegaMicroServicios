@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.item_productos_ubicacion.item_productos_ubicacion.DTO.ItemPedidoDTO;
 import com.item_productos_ubicacion.item_productos_ubicacion.model.ItemPedido;
@@ -24,6 +25,8 @@ public class ItemPedidoService {
     @Autowired
     private ProductoRepository productoRepository;
 
+    @Autowired
+    private WebClient.Builder webClientBuilder;
 
     public ItemPedidoDTO convertirDto(ItemPedido itemPedido) {
         ItemPedidoDTO dto = new ItemPedidoDTO();
@@ -38,10 +41,8 @@ public class ItemPedidoService {
             .block();
         dto.setPedido_id(pedidoDetectado);
         } catch (Exception e) {
-            dto.setPedido_id("No existe");
+            dto.setPedido_id(null);
         }
-        return dto;
-
         if (itemPedido.getProducto() != null) {
             dto.setProducto(productoService.convertirDto(itemPedido.getProducto()));
         }
