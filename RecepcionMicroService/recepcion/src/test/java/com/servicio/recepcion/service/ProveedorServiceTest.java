@@ -19,18 +19,11 @@ public class ProveedorServiceTest {
     @Mock
     private ProveedorRepository proveRepo;
 
-    /*
-     * @Mock
-     * private OrdenRecepcionRepository ordenrepo;
-     */
-
     @InjectMocks
     public ProveedorService proveedorService;
 
     @Test
     void buscarPorId() {
-
-        // Arrange
         Proveedor proveedor = new Proveedor();
         proveedor.setId(1);
         proveedor.setNombre("Proveedor ABC");
@@ -41,10 +34,8 @@ public class ProveedorServiceTest {
         when(proveRepo.findById(1))
                 .thenReturn(Optional.of(proveedor));
 
-        // Act
         ProveedorDTO resultado = proveedorService.buscarPorId(1);
 
-        // Assert
         assertNotNull(resultado);
         assertEquals("Proveedor ABC", resultado.getNombre());
         assertEquals("11111111-1", resultado.getRut());
@@ -54,7 +45,6 @@ public class ProveedorServiceTest {
 
     @Test
     void buscarPorRut() {
-
         Proveedor proveedor = new Proveedor();
         proveedor.setNombre("Proveedor ABC");
         proveedor.setRut("11111111-1");
@@ -71,7 +61,6 @@ public class ProveedorServiceTest {
 
     @Test
     void guardarProveedor() {
-
         ProveedorDTO dto = new ProveedorDTO();
         dto.setNombre("Proveedor Nuevo");
         dto.setRut("11111111-1");
@@ -97,9 +86,7 @@ public class ProveedorServiceTest {
 
     @Test
     void eliminarProveedor() {
-
         proveedorService.eliminarProveedor(1);
-
         verify(proveRepo, times(1)).deleteById(1);
     }
 

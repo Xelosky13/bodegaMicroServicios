@@ -1,44 +1,56 @@
 package com.servicio.recepcion.service;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.servicio.recepcion.DTO.DetalleRecepcionDTO;
 import com.servicio.recepcion.DTO.ProductoExternoDTO;
+import com.servicio.recepcion.exception.RessourceNotfoundException;
 import com.servicio.recepcion.model.DetalleRecepcion;
 import com.servicio.recepcion.repository.DetalleRecepcionRepository;
 
 @Service
 public class DetalleRecepcionService {
-    @Autowired
     private DetalleRecepcionRepository repository;
-    @Autowired
     private ProductoService proService;
 
-    public DetalleRecepcionDTO buscarPorId(Integer id) {
-        DetalleRecepcion response = repository.findDetalleRecepcionById(id);
-        return this.mappearADTO(response);
+    public DetalleRecepcionService(DetalleRecepcionRepository repo, ProductoService service) {
+        this.repository = repo;
+        this.proService = service;
+    }
 
+    public DetalleRecepcionDTO buscarPorId(Integer id) {
+
+        DetalleRecepcion response = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Detalle no encontrado con id: " + id));
+
+        return this.mappearADTO(response);
     }
 
     public DetalleRecepcionDTO mappearADTO(DetalleRecepcion detalle) {
+
+        DetalleRecepcionDTO dto = new DetalleRecepcionDTO();
+
+        dto.setCantidad(detalle.getCantidad());
+        dto.setEstado(detalle.getEstado());
+        dto.setOrden(detalle.getOrden());
+
+        if (detalle.getIdproducto() != null) {
+            ProductoExternoDTO producto = proService.obtenerProducto(detalle.getIdproducto());
+            dto.setProducto(producto);
+        }
+
+        return dto;
+    }
+
+    public DetalleRecepcionDTO mappearAdto(DetalleRecepcionDTO detalle) {
         DetalleRecepcionDTO dto = new DetalleRecepcionDTO();
         dto.setCantidad(detalle.getCantidad());
         dto.setEstado(detalle.getEstado());
         dto.setOrden(detalle.getOrden());
-        dto.setProducto_id(detalle.getProducto_id());
+        dto.setProducto(detalle.getProducto());
         return dto;
-
-    }
-
-    public DetalleRecepcionDTO mappearAMODELO(DetalleRecepcionDTO detalle) {
-        DetalleRecepcionDTO modelo = new DetalleRecepcionDTO();
-        modelo.setCantidad(detalle.getCantidad());
-        modelo.setEstado(detalle.getEstado());
-        modelo.setOrden(detalle.getOrden());
-        modelo.setProducto_id(detalle.getProducto_id());
-        return modelo;
 
     }
 
@@ -48,15 +60,23 @@ public class DetalleRecepcionService {
 
     }
 
-    public ProductoExternoDTO buscarPorProducto_id(Integer idProducto) {
-
-        // DetalleRecepcion detalle = repository.findByProducto(idProducto);
-        ProductoExternoDTO pdto = proService.obtenerProducto(idProducto);
-        if (pdto == null) {
-            System.out.println("Producto no encontrado");
+    public DetalleRecepcionDTO buscarPorProductoId(Integer idProducto) {
+        DetalleRecepcionDTO recepcionDto = buscarPorId(idProducto);
+        if (recepcionDto == null) {
+            throw new RessourceNotfoundException("No se ha encontrado el id de este producto");
         }
-        // return this.mappearADTO(detalle);
-        return pdto;
+        ProductoExternoDTO pdto = proService.obtenerProducto(idProducto);
+        System.out.println(" producto encontrado" + pdto);
+        if (pdto == null) {
+            throw new RessourceNotfoundException("No se ha encontrado el id de este producto");
+        }
+
+        DetalleRecepcionDTO detalle = new DetalleRecepcionDTO();
+        detalle.setCantidad(recepcionDto.getCantidad());
+        detalle.setEstado(recepcionDto.getEstado());
+        detalle.setOrden(recepcionDto.getOrden());
+        detalle.setProducto(pdto);
+        return detalle;
 
     }
 
@@ -67,10 +87,15 @@ public class DetalleRecepcionService {
 
     public DetalleRecepcionDTO guardarDetalleRecepcion(DetalleRecepcionDTO dto) {
         DetalleRecepcion detalleRecepcion = new DetalleRecepcion();
+
         detalleRecepcion.setCantidad(dto.getCantidad());
         detalleRecepcion.setEstado(dto.getEstado());
         detalleRecepcion.setOrden(dto.getOrden());
-        detalleRecepcion.setProducto_id(dto.getProducto_id());
+
+        if (dto.getProducto() == null || dto.getProducto().getId() == null) {
+            throw new IllegalArgumentException("El producto es obligatorio");
+        }
+        detalleRecepcion.setIdproducto(dto.getProducto().getId());
 
         DetalleRecepcion guardado = repository.save(detalleRecepcion);
 
@@ -84,7 +109,6 @@ public class DetalleRecepcionService {
             detalleRec.setCantidad(detalle.getCantidad());
             detalleRec.setEstado(detalle.getEstado());
             detalleRec.setOrden(detalle.getOrden());
-            detalleRec.setProducto_id(detalle.getProducto_id());
             repository.save(detalleRec);
         }
         return this.mappearADTO(detalleRec);

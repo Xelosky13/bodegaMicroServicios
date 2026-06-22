@@ -1,7 +1,6 @@
 package com.servicio.recepcion.controller;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.servicio.recepcion.DTO.DetalleRecepcionDTO;
-import com.servicio.recepcion.DTO.ProductoExternoDTO;
 import com.servicio.recepcion.service.DetalleRecepcionService;
+import com.servicio.recepcion.service.ProductoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,8 +21,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Detalle Recepción", description = "Operaciones relacionadas con los detalles de recepción")
 @RequestMapping("/api/v1/detallerecepcion")
 public class DetalleRecepcionController {
-    @Autowired
+
     private DetalleRecepcionService service;
+
+    public DetalleRecepcionController(DetalleRecepcionService service) {
+        this.service = service;
+    }
 
     @Operation(summary = "Registrar detalle de recepción", description = "Permite crear un nuevo detalle de recepción")
     @PostMapping
@@ -72,8 +75,8 @@ public class DetalleRecepcionController {
 
     @Operation(summary = "Buscar detalle por un Producto_id", description = "Obtiene un detalle de recepción según el ID de un producto")
     @GetMapping("/producto/{id}")
-    public ProductoExternoDTO buscarPorId_ProductoExternoDTO(@PathVariable Integer id) {
-        return service.buscarPorProducto_id(id);
+    public DetalleRecepcionDTO buscarPorIdProductoExternoDTO(@PathVariable Integer id) {
+        return service.buscarPorProductoId(id);
     }
 
 }

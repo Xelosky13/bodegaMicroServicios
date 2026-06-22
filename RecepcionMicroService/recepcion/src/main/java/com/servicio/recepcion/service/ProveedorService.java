@@ -20,7 +20,6 @@ public class ProveedorService {
         ProveedorDTO dto = new ProveedorDTO();
         dto.setNombre(prov.getNombre());
         dto.setNombreContacto(prov.getNombreContacto());
-        // dto.setOrdenes(prov.getOrdenes());
         dto.setTelefono(prov.getTelefono());
         dto.setRut(prov.getRut());
         return dto;
@@ -70,7 +69,6 @@ public class ProveedorService {
         Proveedor pro = new Proveedor();
         pro.setNombre(dto.getNombre());
         pro.setNombreContacto(dto.getNombreContacto());
-        // pro.setOrdenes(dto.getOrdenes());
         pro.setRut(dto.getRut());
         pro.setTelefono(dto.getTelefono());
         Proveedor guardado = proveRepo.save(pro);
@@ -89,7 +87,6 @@ public class ProveedorService {
             prove.setNombre(pro.getNombre());
             prove.setTelefono(pro.getTelefono());
             prove.setNombreContacto(pro.getNombreContacto());
-            // prove.setOrdenes(pro.getOrdenes());
             proveRepo.save(prove);
         }
     }

@@ -20,8 +20,12 @@ import io.swagger.v3.oas.annotations.Operation;
 @RestController
 @RequestMapping("/api/v1/proveedor")
 public class ProveedorController {
-    @Autowired
+
     private ProveedorService service;
+
+    public ProveedorController(ProveedorService service) {
+        this.service = service;
+    }
 
     @PostMapping()
     @Operation(summary = "Registrar Proveedor", description = "Permite crear un nuevo proveedor")
@@ -36,7 +40,6 @@ public class ProveedorController {
     @GetMapping("/{id}")
     @Operation(summary = "Buscar Proveedor", description = "Permite obtener un  proveedor por su ID")
     public ResponseEntity<ProveedorDTO> buscarPorId(@PathVariable Integer id) {
-        // System.out.println(id + " Recibido");
         ProveedorDTO dto = service.buscarPorId(id);
         if (dto == null) {
             return ResponseEntity.badRequest().build();

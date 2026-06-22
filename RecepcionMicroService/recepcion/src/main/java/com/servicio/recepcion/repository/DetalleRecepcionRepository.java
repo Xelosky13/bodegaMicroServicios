@@ -5,16 +5,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import com.servicio.recepcion.model.DetalleRecepcion;
 
 public interface DetalleRecepcionRepository extends JpaRepository<DetalleRecepcion, Integer> {
 
-    public DetalleRecepcion findDetalleRecepcionById(Integer Id);
-
     public List<DetalleRecepcion> findByEstado(String estado);
 
-    // public DetalleRecepcion findByProducto(Integer id_producto);
+    public DetalleRecepcion findByProducto(Integer id_producto);
 
     @Query("SELECT d from DetalleRecepcion d WHERE d.estado=?1")
     public ArrayList<DetalleRecepcion> buscarDetallePorEstado(String estado);

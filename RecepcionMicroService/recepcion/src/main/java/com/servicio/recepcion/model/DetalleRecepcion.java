@@ -42,7 +42,6 @@ public class DetalleRecepcion {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ordenrecepcion_id", nullable = false)
     private OrdenRecepcion orden;
-
-    private Integer producto_id;
-
+    @Column(name = "producto_id")
+    private Integer idproducto;
 }
