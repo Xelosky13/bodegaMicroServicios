@@ -74,7 +74,7 @@ public class ProductoService {
     @Transactional
     public ProductoDTO actualizar(Integer id, ProductoDTO dto){
         Producto producto = productoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Id no exsite"));
+            .orElseThrow(() -> new RuntimeException("Id no existe"));
         producto.setNombre(dto.getNombre());
         producto.setSku(dto.getSku());
         if(dto.getStockActual() != null){
