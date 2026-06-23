@@ -87,6 +87,7 @@ public class ProveedorService {
             prove.setNombre(pro.getNombre());
             prove.setTelefono(pro.getTelefono());
             prove.setNombreContacto(pro.getNombreContacto());
+
             proveRepo.save(prove);
         }
     }

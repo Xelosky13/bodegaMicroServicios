@@ -1,5 +1,9 @@
 package com.servicio.recepcion.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 //import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -10,7 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-//import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -52,8 +56,7 @@ public class Proveedor {
     @Column(nullable = false, length = 100)
     private String nombreContacto;
 
-    /*
-     * @OneToMany(mappedBy = "proveedor")
-     * private List<OrdenRecepcion> ordenes;
-     */
+    @OneToMany(mappedBy = "proveedor")
+    @JsonBackReference
+    private List<OrdenRecepcion> ordenes;
 }

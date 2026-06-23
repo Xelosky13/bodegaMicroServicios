@@ -11,7 +11,7 @@ public interface DetalleRecepcionRepository extends JpaRepository<DetalleRecepci
 
     public List<DetalleRecepcion> findByEstado(String estado);
 
-    public DetalleRecepcion findByProducto(Integer id_producto);
+    public DetalleRecepcion findByIdproducto(Integer id_producto);
 
     @Query("SELECT d from DetalleRecepcion d WHERE d.estado=?1")
     public ArrayList<DetalleRecepcion> buscarDetallePorEstado(String estado);
