@@ -21,7 +21,6 @@ import com.item_productos_ubicacion.item_productos_ubicacion.model.ItemPedido;
 import com.item_productos_ubicacion.item_productos_ubicacion.model.Producto;
 import com.item_productos_ubicacion.item_productos_ubicacion.repository.ItemPedidoRepository;
 
-import jakarta.inject.Inject;
 import net.datafaker.Faker;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +29,9 @@ public class ItemPedidoServiceTest {
     @Mock
     private ItemPedidoRepository itemPedidoRepository;
 
+    @Mock
+    private ProductoService productoService;
+    
     @InjectMocks
     private ItemPedidoService itemPedidoService;
 
