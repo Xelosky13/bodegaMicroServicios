@@ -27,9 +27,6 @@ import com.item_productos_ubicacion.item_productos_ubicacion.model.ItemPedido;
 import com.item_productos_ubicacion.item_productos_ubicacion.model.Producto;
 import com.item_productos_ubicacion.item_productos_ubicacion.repository.ItemPedidoRepository;
 import com.item_productos_ubicacion.item_productos_ubicacion.repository.ProductoRepository;
-import com.item_productos_ubicacion.item_productos_ubicacion.model.ItemPedido;
-import com.item_productos_ubicacion.item_productos_ubicacion.model.Producto;
-import com.item_productos_ubicacion.item_productos_ubicacion.repository.ItemPedidoRepository;
 
 import net.datafaker.Faker;
 
@@ -48,7 +45,6 @@ public class ItemPedidoServiceTest {
     @Mock
     private ItemPedidoValidaciones itemPedidoValidaciones;
 
-    private ProductoService productoService;
     
     @InjectMocks
     private ItemPedidoService itemPedidoService;
@@ -191,15 +187,17 @@ public class ItemPedidoServiceTest {
 
         assertEquals(30, total, "Si el repositorio da null, debe transformarse a 0");
     
+    }
     @Test
-    void testBuscarItemPedidopPorId_Exitoso(){
+    void testBuscarItemPedidopPorId_Exitoso() {
         Integer idSimulado = 1;
         Integer cantidadAleatoria = faker.number().numberBetween(1, 100);
         Integer pedidoIdFalso = faker.number().numberBetween(500, 999);
+        String nombreProductoFalso = faker.commerce().productName();
 
         Producto productoFalso = Producto.builder()
             .id(10)
-            .nombre(faker.commerce().productName())
+            .nombre(nombreProductoFalso)
             .sku(faker.code().asin())
             .build();
         
@@ -210,14 +208,23 @@ public class ItemPedidoServiceTest {
             .producto(productoFalso)
             .build();
 
+        ProductoDTO productoDtoFalso = new ProductoDTO();
+        productoDtoFalso.setId(10);
+        productoDtoFalso.setNombre(nombreProductoFalso);
+
         when(itemPedidoRepository.findById(idSimulado)).thenReturn(Optional.of(itemFalso));
+        when(productoService.convertirDto(any(Producto.class))).thenReturn(productoDtoFalso);
+        
+        when(itemPedidoValidaciones.obtenerPedidoIdExterno(idSimulado)).thenReturn(pedidoIdFalso);
 
         ItemPedidoDTO resultado = itemPedidoService.buscarPorId(idSimulado);
 
-        assertNotNull(resultado, "El DTO resultante no deberia  ser nulo");
-        assertEquals(cantidadAleatoria, resultado.getCantidad(), "La cantidad debe coincidir ");
+        assertNotNull(resultado, "El DTO resultante no deberia ser nulo");
+        assertEquals(cantidadAleatoria, resultado.getCantidad(), "La cantidad debe coincidir");
         assertEquals(pedidoIdFalso, resultado.getPedido_id(), "El id pedido externo debe guardarse correctamente");
         
         verify(itemPedidoRepository, times(1)).findById(idSimulado);
+        verify(productoService, times(1)).convertirDto(any(Producto.class));
+        verify(itemPedidoValidaciones, times(1)).obtenerPedidoIdExterno(idSimulado); // Validamos que se use
     }
 }
