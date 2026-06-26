@@ -27,11 +27,15 @@ import com.item_productos_ubicacion.item_productos_ubicacion.model.ItemPedido;
 import com.item_productos_ubicacion.item_productos_ubicacion.model.Producto;
 import com.item_productos_ubicacion.item_productos_ubicacion.repository.ItemPedidoRepository;
 import com.item_productos_ubicacion.item_productos_ubicacion.repository.ProductoRepository;
+import com.item_productos_ubicacion.item_productos_ubicacion.model.ItemPedido;
+import com.item_productos_ubicacion.item_productos_ubicacion.model.Producto;
+import com.item_productos_ubicacion.item_productos_ubicacion.repository.ItemPedidoRepository;
 
 import net.datafaker.Faker;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemPedidoServiceTest {
+    
     @Mock
     private ItemPedidoRepository itemPedidoRepository;
 
@@ -44,6 +48,8 @@ public class ItemPedidoServiceTest {
     @Mock
     private ItemPedidoValidaciones itemPedidoValidaciones;
 
+    private ProductoService productoService;
+    
     @InjectMocks
     private ItemPedidoService itemPedidoService;
 
@@ -184,5 +190,34 @@ public class ItemPedidoServiceTest {
         Integer total = itemPedidoService.obtenerTotalUnidadesPorPedido(pedidoId);
 
         assertEquals(30, total, "Si el repositorio da null, debe transformarse a 0");
+    
+    @Test
+    void testBuscarItemPedidopPorId_Exitoso(){
+        Integer idSimulado = 1;
+        Integer cantidadAleatoria = faker.number().numberBetween(1, 100);
+        Integer pedidoIdFalso = faker.number().numberBetween(500, 999);
+
+        Producto productoFalso = Producto.builder()
+            .id(10)
+            .nombre(faker.commerce().productName())
+            .sku(faker.code().asin())
+            .build();
+        
+        ItemPedido itemFalso = ItemPedido.builder()
+            .id(idSimulado)
+            .cantidad(cantidadAleatoria)
+            .pedido_id(pedidoIdFalso)
+            .producto(productoFalso)
+            .build();
+
+        when(itemPedidoRepository.findById(idSimulado)).thenReturn(Optional.of(itemFalso));
+
+        ItemPedidoDTO resultado = itemPedidoService.buscarPorId(idSimulado);
+
+        assertNotNull(resultado, "El DTO resultante no deberia  ser nulo");
+        assertEquals(cantidadAleatoria, resultado.getCantidad(), "La cantidad debe coincidir ");
+        assertEquals(pedidoIdFalso, resultado.getPedido_id(), "El id pedido externo debe guardarse correctamente");
+        
+        verify(itemPedidoRepository, times(1)).findById(idSimulado);
     }
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 public class DetalleRecepcionDTO {
     private String estado;
     private Integer cantidad;
-    private Integer producto_id;
     private OrdenRecepcion orden;
+    private ProductoExternoDTO producto;
 
 }

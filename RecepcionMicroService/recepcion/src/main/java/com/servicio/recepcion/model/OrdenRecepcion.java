@@ -3,6 +3,8 @@ package com.servicio.recepcion.model;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -41,8 +43,10 @@ public class OrdenRecepcion {
 
     @ManyToOne
     @JoinColumn(name = "proveedor_id", nullable = false)
+    @JsonBackReference
     private Proveedor proveedor;
 
     @OneToMany(mappedBy = "orden")
+    @JsonBackReference
     private List<DetalleRecepcion> detalles;
 }

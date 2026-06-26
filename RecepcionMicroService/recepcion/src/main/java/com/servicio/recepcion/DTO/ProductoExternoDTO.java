@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ProductoExternoDTO {
     private Integer id;
     private String nombre;
-    private String SKU;
-    private Integer StockActual;
-
+    private String sku;
+    private Integer stockActual;
+    private UbicacionDTO ubicacion;
 }

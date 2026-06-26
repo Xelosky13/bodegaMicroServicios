@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ItemProductosUbicacionApplication<item-productos-ubicacion>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.item_productos_ubicacion.item_productos_ubicacion.ItemProductosUbicacionApplication",
+            "projectName": "item-productos-ubicacion",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

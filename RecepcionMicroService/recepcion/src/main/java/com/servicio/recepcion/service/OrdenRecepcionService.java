@@ -2,8 +2,6 @@ package com.servicio.recepcion.service;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.servicio.recepcion.DTO.OrdenRecepcionDTO;
@@ -12,8 +10,11 @@ import com.servicio.recepcion.repository.OrdenRecepcionRepository;
 
 @Service
 public class OrdenRecepcionService {
-    @Autowired
     private OrdenRecepcionRepository repo;
+
+    public OrdenRecepcionService(OrdenRecepcionRepository repository) {
+        this.repo = repository;
+    }
 
     public OrdenRecepcionDTO buscarOrdenPorId(Integer id) {
         OrdenRecepcion response = repo.findById(id).orElse(null);

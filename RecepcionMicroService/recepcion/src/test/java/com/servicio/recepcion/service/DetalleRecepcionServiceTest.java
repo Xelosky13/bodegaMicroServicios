@@ -30,22 +30,20 @@ public class DetalleRecepcionServiceTest {
 
     @Test
     void buscarPorId() {
-
-        // Preparar datos
         DetalleRecepcion detalle = new DetalleRecepcion();
         ProductoExternoDTO producto = new ProductoExternoDTO();
         producto.setId(1);
         OrdenRecepcion orden = new OrdenRecepcion();
         orden.setId(1);
 
-        detalle.setProducto(producto);
+        detalle.setIdproducto(producto.getId());
         detalle.setOrden(orden);
         detalle.setId(1);
         detalle.setCantidad(10);
         detalle.setEstado("Recibido");
 
-        when(repoDetalle.findDetalleRecepcionById(1))
-                .thenReturn(detalle);
+        when(repoDetalle.findById(1))
+                .thenReturn(Optional.of(detalle));
 
         DetalleRecepcionDTO dto = serviceDetalle.buscarPorId(1);
 
@@ -85,7 +83,6 @@ public class DetalleRecepcionServiceTest {
     void eliminarDetalle() {
         serviceDetalle.deleteById(1);
         verify(repoDetalle, times(1)).deleteById(1);
-
     }
 
     @Test
@@ -99,7 +96,7 @@ public class DetalleRecepcionServiceTest {
         detalle.setCantidad(20);
         detalle.setEstado("Cancelado");
         detalle.setOrden(orden);
-        detalle.setProducto(producto);
+        detalle.setIdproducto(producto.getId());
         detalle.setId(1);
 
         DetalleRecepcionDTO nuevoDetalle = new DetalleRecepcionDTO();
@@ -127,7 +124,6 @@ public class DetalleRecepcionServiceTest {
 
     @Test
     void guardarDetalle() {
-
         DetalleRecepcionDTO dto = new DetalleRecepcionDTO();
         OrdenRecepcion orden = new OrdenRecepcion();
         orden.setId(1);
@@ -144,7 +140,7 @@ public class DetalleRecepcionServiceTest {
         guardado.setCantidad(dto.getCantidad());
         guardado.setEstado(dto.getEstado());
         guardado.setOrden(orden);
-        guardado.setProducto(producto);
+        guardado.setIdproducto(producto.getId());
 
         when(repoDetalle.save(org.mockito.ArgumentMatchers.any(DetalleRecepcion.class)))
                 .thenReturn(guardado);

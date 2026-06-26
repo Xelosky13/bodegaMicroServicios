@@ -21,8 +21,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Orden Recepción", description = "Operaciones relacionadas con los ordenes de recepción")
 @RequestMapping("/api/v1/ordenrecepcion")
 public class OrdenRecepcionController {
-    @Autowired
+
     private OrdenRecepcionService service;
+
+    public OrdenRecepcionController(OrdenRecepcionService service) {
+        this.service = service;
+    }
 
     @Operation(summary = "Registrar un orden de recepción", description = "Permite crear un nuevo orden de recepción")
     @PostMapping
@@ -34,7 +38,7 @@ public class OrdenRecepcionController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Obtener un orden de recepción", description = "Permite obtener un nuevo orden de recepción")
+    @Operation(summary = "Obtener una orden de recepción", description = "Permite obtener un nuevo orden de recepción")
     @GetMapping("/{id}")
     public ResponseEntity<OrdenRecepcionDTO> buscarPorId(@PathVariable Integer id) {
         OrdenRecepcionDTO dto = service.buscarOrdenPorId(id);
