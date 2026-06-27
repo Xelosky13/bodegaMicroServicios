@@ -14,7 +14,7 @@ public class ItemPedidoValidaciones {
         try {
             return webClientBuilder.build()
                     .get()
-                    .uri("http://localhost:8081/api/v1/pedidos/" + idItem)
+                    .uri("lb://cliente-service/api/v1/pedidos" + idItem)
                     .retrieve()
                     .bodyToMono(Integer.class)
                     .block();
